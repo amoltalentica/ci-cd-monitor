@@ -1,0 +1,33 @@
+name: Instance Health Check Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"   # Runs every 15 minutes
+
+jobs:
+  health-check:
+    runs-on: self-hosted
+    steps:
+      - name: Run system health checks
+        run: |
+          mkdir -p /opt/test-pipelines
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          LOGFILE=/opt/test-pipelines/instance-health.log
+
+          echo "[${TIMESTAMP}] Running health checks..." >> $LOGFILE
+
+          echo "Uptime:" >> $LOGFILE
+          uptime >> $LOGFILE
+
+          echo "Memory Usage:" >> $LOGFILE
+          free -h >> $LOGFILE
+
+          echo "CPU Load:" >> $LOGFILE
+          top -bn1 | grep "Cpu(s)" >> $LOGFILE
+
+          echo "Disk Usage:" >> $LOGFILE
+          df -h / >> $LOGFILE
+
+          echo "[${TIMESTAMP}] Health check completed." >> $LOGFILE
+

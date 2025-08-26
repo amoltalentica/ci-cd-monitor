@@ -1,0 +1,29 @@
+name: Disk Usage and Inode Monitor Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"   # Runs every hour
+
+jobs:
+  disk-usage-monitor:
+    runs-on: self-hosted
+    steps:
+      - name: Collect disk usage and inode stats
+        run: |
+          mkdir -p /opt/test-pipelines
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          LOGFILE=/opt/test-pipelines/disk-usage-monitor.log
+
+          echo "[${TIMESTAMP}] Running disk usage and inode check..." >> $LOGFILE
+
+          echo "Disk Usage by mount point:" >> $LOGFILE
+          df -h | grep -E '^Filesystem| /$| /home| /var' >> $LOGFILE
+          echo "" >> $LOGFILE
+
+          echo "Inode Usage by mount point:" >> $LOGFILE
+          df -i | grep -E '^Filesystem| /$| /home| /var' >> $LOGFILE
+          echo "" >> $LOGFILE
+
+          echo "[${TIMESTAMP}] Disk usage and inode check completed." >> $LOGFILE
+
