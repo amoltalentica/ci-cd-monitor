@@ -1,0 +1,30 @@
+name: Free Memory Monitor Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"   # Runs every hour
+
+jobs:
+  memory-monitor:
+    runs-on: self-hosted
+    steps:
+      - name: Collect free memory stats
+        run: |
+          mkdir -p /opt/test-pipelines
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          LOGFILE=/opt/test-pipelines/memory-monitor.log
+
+          echo "[${TIMESTAMP}] Running free memory check..." >> $LOGFILE
+
+          echo "Memory Usage (in MB):" >> $LOGFILE
+          free -m >> $LOGFILE
+          echo "" >> $LOGFILE
+
+          echo "Top 5 processes by memory usage:" >> $LOGFILE
+          ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -n 6 >> $LOGFILE
+          echo "" >> $LOGFILE
+
+          echo "[${TIMESTAMP}] Free memory check completed." >> $LOGFILE
+
+

@@ -1,0 +1,25 @@
+name: Active Running Process Monitor Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"   # Runs every 15 minutes
+
+jobs:
+  process-monitor:
+    runs-on: self-hosted
+    steps:
+      - name: Collect active running process stats
+        run: |
+          mkdir -p /opt/test-pipelines
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          LOGFILE=/opt/test-pipelines/active-process-monitor.log
+
+          echo "[${TIMESTAMP}] Running active process check..." >> $LOGFILE
+
+          echo "Total number of running processes:" >> $LOGFILE
+          ps -e --no-headers | wc -l >> $LOGFILE
+          echo "" >> $LOGFILE
+
+          echo "Top 10 processes by CPU usage:" >> $LOGFILE
+          ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 11 >>
