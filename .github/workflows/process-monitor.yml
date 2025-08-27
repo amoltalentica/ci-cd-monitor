@@ -9,7 +9,7 @@ jobs:
   process-monitor:
     runs-on: self-hosted
     steps:
-      - name: Collect active running process stats
+           - name: Collect active running process stats
         run: |
           mkdir -p /opt/test-pipelines
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
@@ -22,4 +22,9 @@ jobs:
           echo "" >> $LOGFILE
 
           echo "Top 10 processes by CPU usage:" >> $LOGFILE
-          ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 11 >>
+          ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 11 >> $LOGFILE
+          echo "" >> $LOGFILE
+
+          echo "Top 10 processes by Memory usage:" >> $LOGFILE
+          ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -n 11 >> $LOGFILE
+          echo "" >> $LOGFILE
