@@ -1,7 +1,7 @@
 name: Active Running Process Monitor Pipeline
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   schedule:
     - cron: "0 * * * *"   # Runs every hour
 
@@ -9,7 +9,7 @@ jobs:
   process-monitor:
     runs-on: self-hosted
     steps:
-           - name: Collect active running process stats
+      - name: Collect active running process stats
         run: |
           mkdir -p /opt/test-pipelines
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
