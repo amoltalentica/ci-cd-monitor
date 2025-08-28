@@ -1,0 +1,2 @@
+- name: Fail step
+  run: exit 1
