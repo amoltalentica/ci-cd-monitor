@@ -2,8 +2,8 @@ name: Free Memory Monitor Pipeline
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 * * * *"   # Runs every hour
+ # schedule:
+  #  - cron: "0 * * * *"   # Runs every hour
 
 jobs:
   memory-monitor:
